@@ -1,9 +1,18 @@
 package csula.cs4660.exercises;
 
+import com.google.common.collect.Lists;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Introduction Java exercise to read file
+ * Taken from repository, trying to get Pull/Push requests on Git to work 
  */
 public class FileRead {
     private int[][] numbers;
@@ -13,6 +22,20 @@ public class FileRead {
      */
     public FileRead(File file) {
         // TODO: read the file content and store content into numbers
+        List<List<Integer>> listOfNumbers = Lists.newArrayList();
+        try (Stream<String> stream = Files.lines(file.toPath())) {
+            stream.forEach(line -> {
+                List<Integer> lineNumbers = Lists.newArrayList();
+                for (String token: line.split(" ")) {
+                    lineNumbers.add(Integer.parseInt(token));
+                }
+                System.out.println(line);
+                listOfNumbers.add(lineNumbers);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        numbers = converList(listOfNumbers);
     }
 
     /**
@@ -23,18 +46,42 @@ public class FileRead {
      * lineNumber starts with 0 (programming friendly!)
      */
     public int mean(int lineNumber) {
-        return 0;
+        return sum(lineNumber) / numbers[lineNumber].length;
     }
 
     public int max(int lineNumber) {
-        return 0;
+        int max = Integer.MIN_VALUE;
+        for (int i : numbers[lineNumber]) {
+            max = Integer.max(max, i);
+        }
+        return max;
     }
 
     public int min(int lineNumber) {
-        return 0;
+        int min = Integer.MAX_VALUE;
+        for (int i : numbers[lineNumber]) {
+            min = Integer.min(min, i);
+        }
+        return min;
     }
 
     public int sum(int lineNumber) {
+        int sum = 0;
+        for (int i : numbers[lineNumber]) {
+            sum += i;
+        }
         return 0;
+    }
+
+    private int[][] converList(List<List<Integer>> arrayList) {
+        int[][] array = new int[arrayList.size()][];
+        for (int i = 0; i < arrayList.size(); i++) {
+            List<Integer> row = arrayList.get(i);
+            array[i] = new int[row.size()];
+            for (int j = 0; j < row.size(); j ++) {
+                array[i][j] = row.get(j);
+            }
+        }
+        return array;
     }
 }
