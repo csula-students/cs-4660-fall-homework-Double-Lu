@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 /**
  * Introduction Java exercise to read file
- * Taken from repository, trying to get Pull/Push requests on Git to work 
  */
 public class FileRead {
     private int[][] numbers;
